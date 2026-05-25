@@ -1,0 +1,15 @@
+pyrofork
+tgcrypto
+fastapi
+uvicorn
+pillow
+numpy
+torch
+torchvision
+transformers
+accelerate
+python-dotenv
+python-multipart
+aiofiles
+requests
+opencv-python-headless
