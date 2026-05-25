@@ -1,4 +1,5 @@
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,9 +9,5 @@ API_HASH = os.getenv("API_HASH")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 HF_TOKEN = os.getenv("HF_TOKEN")
-
-ADMIN_ID = int(os.getenv("ADMIN_ID", "0"))
-
-TEMP_DIR = "temp"
 
 RMBG_MODEL_NAME = "briaai/RMBG-2.0"
