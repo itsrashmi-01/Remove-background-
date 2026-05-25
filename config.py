@@ -7,9 +7,9 @@ API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-ADMIN_ID = int(os.getenv("OWNER_ID", "0"))
+HF_TOKEN = os.getenv("HF_TOKEN")
 
-MAX_IMAGE_SIZE = 10 * 1024 * 1024
+ADMIN_ID = int(os.getenv("ADMIN_ID", "0"))
 
 TEMP_DIR = "temp"
 
