@@ -1,26 +1,36 @@
-from PIL import Image
-from transformers import AutoModelForImageSegmentation
 import torch
-import torchvision.transforms as transforms
 import numpy as np
 
-from config import RMBG_MODEL_NAME
+from PIL import Image
+
+from transformers import AutoModelForImageSegmentation
+import torchvision.transforms as transforms
+
+from config import RMBG_MODEL_NAME, HF_TOKEN
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+print("📦 Loading RMBG-2.0 model...")
+
 model = AutoModelForImageSegmentation.from_pretrained(
     RMBG_MODEL_NAME,
-    trust_remote_code=True
+    trust_remote_code=True,
+    token=HF_TOKEN
 )
 
 model.to(device)
 model.eval()
+
+print("✅ RMBG-2.0 Loaded")
+
 
 transform_image = transforms.Compose([
     transforms.Resize((1024, 1024)),
     transforms.ToTensor(),
     transforms.Normalize([0.5], [0.5])
 ])
+
 
 async def remove_background(input_path, output_path):
 
@@ -42,3 +52,5 @@ async def remove_background(input_path, output_path):
     image.putalpha(mask_image)
 
     image.save(output_path)
+
+    return output_path
