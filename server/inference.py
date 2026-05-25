@@ -11,18 +11,7 @@ from config import RMBG_MODEL_NAME, HF_TOKEN
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-print("📦 Loading RMBG-2.0 model...")
-
-model = AutoModelForImageSegmentation.from_pretrained(
-    RMBG_MODEL_NAME,
-    trust_remote_code=True,
-    token=HF_TOKEN
-)
-
-model.to(device)
-model.eval()
-
-print("✅ RMBG-2.0 Loaded")
+model = None
 
 
 transform_image = transforms.Compose([
@@ -32,7 +21,29 @@ transform_image = transforms.Compose([
 ])
 
 
+def load_model():
+
+    global model
+
+    if model is None:
+
+        print("📦 Loading RMBG-2.0 model...")
+
+        model = AutoModelForImageSegmentation.from_pretrained(
+            RMBG_MODEL_NAME,
+            trust_remote_code=True,
+            token=HF_TOKEN
+        )
+
+        model.to(device)
+        model.eval()
+
+        print("✅ RMBG-2.0 Loaded")
+
+
 async def remove_background(input_path, output_path):
+
+    load_model()
 
     image = Image.open(input_path).convert("RGB")
 
