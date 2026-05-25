@@ -4,8 +4,6 @@ fastapi
 uvicorn
 pillow
 numpy
-torch
-torchvision
 transformers
 accelerate
 python-dotenv
