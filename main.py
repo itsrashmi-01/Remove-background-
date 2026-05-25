@@ -1,8 +1,8 @@
-import asyncio
 import os
+import asyncio
 import uvicorn
 
-from pyrogram import idle
+from pyrogram import idle, filters
 
 from server.client import app
 from server.api import api
@@ -11,10 +11,16 @@ import plugins.start
 import plugins.remove_bg
 
 
+@app.on_message(filters.all)
+async def debug_all(client, message):
+    print(f"📩 MESSAGE RECEIVED: {message.chat.id}")
+
+
 async def start_bot():
     await app.start()
     print("✅ Bot Started")
     await idle()
+    await app.stop()
 
 
 async def start_api():
