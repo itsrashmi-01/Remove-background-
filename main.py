@@ -7,22 +7,33 @@ from server.api import api
 import plugins.start
 import plugins.remove_bg
 
-async def start_services():
 
-    bot_task = asyncio.create_task(app.start())
+async def start_bot():
+    await app.start()
+    print("✅ Bot Started")
+    await idle()
 
-    api_config = uvicorn.Config(
-        api,
+
+async def start_api():
+    config = uvicorn.Config(
+        app=api,
         host="0.0.0.0",
         port=10000,
         log_level="info"
     )
 
-    api_server = uvicorn.Server(api_config)
+    server = uvicorn.Server(config)
 
-    api_task = asyncio.create_task(api_server.serve())
+    await server.serve()
 
-    await asyncio.gather(bot_task, api_task)
+
+async def main():
+    await asyncio.gather(
+        start_bot(),
+        start_api()
+    )
+
 
 if __name__ == "__main__":
-    asyncio.run(start_services())
+    from pyrogram import idle
+    asyncio.run(main())
