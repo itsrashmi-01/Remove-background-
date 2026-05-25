@@ -2,16 +2,16 @@ from pyrogram import filters
 
 from server.client import app
 
-from plugins.utils import (
-    generate_filename,
-    cleanup_file
-)
-
+from plugins.utils import generate_filename, cleanup_file
 from server.inference import remove_background
 
+print("✅ remove_bg plugin loaded")
 
-@app.on_message(filters.photo)
+
+@app.on_message(filters.photo | filters.document.image)
 async def remove_bg_handler(client, message):
+
+    print("🔥 REMOVE BG TRIGGERED")
 
     status = await message.reply_text(
         "✂️ Removing background..."
@@ -22,12 +22,12 @@ async def remove_bg_handler(client, message):
 
     try:
 
-        photo = await message.download(
+        downloaded_file = await message.download(
             file_name=input_path
         )
 
         await remove_background(
-            photo,
+            downloaded_file,
             output_path
         )
 
@@ -40,11 +40,12 @@ async def remove_bg_handler(client, message):
 
     except Exception as e:
 
+        print(f"❌ ERROR: {e}")
+
         await status.edit_text(
             f"❌ Error:\n`{str(e)}`"
         )
 
     finally:
-
         cleanup_file(input_path)
         cleanup_file(output_path)
