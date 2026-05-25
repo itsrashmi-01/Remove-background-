@@ -1,5 +1,8 @@
 import asyncio
+import os
 import uvicorn
+
+from pyrogram import idle
 
 from server.client import app
 from server.api import api
@@ -15,10 +18,11 @@ async def start_bot():
 
 
 async def start_api():
+
     config = uvicorn.Config(
         app=api,
         host="0.0.0.0",
-        port=10000,
+        port=int(os.environ.get("PORT", 10000)),
         log_level="info"
     )
 
@@ -35,5 +39,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    from pyrogram import idle
     asyncio.run(main())
