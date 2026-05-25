@@ -1,10 +1,9 @@
-from pyrogram import Client
-from config import API_ID, API_HASH, BOT_TOKEN
+import os
+import uuid
 
-app = Client(
-    "RMBG_BOT",
-    api_id=API_ID,
-    api_hash=API_HASH,
-    bot_token=BOT_TOKEN,
-    workers=50
-)
+def generate_filename(extension="png"):
+    return f"temp/{uuid.uuid4().hex}.{extension}"
+
+def cleanup_file(path):
+    if os.path.exists(path):
+        os.remove(path)
