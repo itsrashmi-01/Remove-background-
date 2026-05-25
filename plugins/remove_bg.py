@@ -1,8 +1,14 @@
 from pyrogram import filters
+
 from server.client import app
 
-from plugins.utils import generate_filename, cleanup_file
+from plugins.utils import (
+    generate_filename,
+    cleanup_file
+)
+
 from server.inference import remove_background
+
 
 @app.on_message(filters.photo)
 async def remove_bg_handler(client, message):
@@ -16,9 +22,14 @@ async def remove_bg_handler(client, message):
 
     try:
 
-        photo = await message.download(file_name=input_path)
+        photo = await message.download(
+            file_name=input_path
+        )
 
-        await remove_background(photo, output_path)
+        await remove_background(
+            photo,
+            output_path
+        )
 
         await message.reply_document(
             document=output_path,
@@ -34,5 +45,6 @@ async def remove_bg_handler(client, message):
         )
 
     finally:
+
         cleanup_file(input_path)
         cleanup_file(output_path)
