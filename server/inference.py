@@ -1,10 +1,16 @@
 from rembg import remove
 
-
-print("📦 Loading Rembg Model...")
+model_loaded = False
 
 
 async def remove_background(input_path, output_path):
+
+    global model_loaded
+
+    if not model_loaded:
+        print("📦 Loading Rembg Model...")
+        model_loaded = True
+        print("✅ Rembg Ready")
 
     with open(input_path, "rb") as input_file:
         input_data = input_file.read()
@@ -18,6 +24,3 @@ async def remove_background(input_path, output_path):
         output_file.write(output_data)
 
     return output_path
-
-
-print("✅ Rembg Ready")
