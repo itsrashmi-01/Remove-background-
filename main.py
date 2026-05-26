@@ -17,13 +17,19 @@ async def debug_all(client, message):
 
 
 async def start_bot():
+
     await app.start()
+
     print("✅ Bot Started")
+
     await idle()
+
     await app.stop()
 
 
-async def start_api():
+async def run_services():
+
+    asyncio.create_task(start_bot())
 
     config = uvicorn.Config(
         app=api,
@@ -37,12 +43,5 @@ async def start_api():
     await server.serve()
 
 
-async def main():
-    await asyncio.gather(
-        start_bot(),
-        start_api()
-    )
-
-
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(run_services())
