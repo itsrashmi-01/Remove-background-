@@ -1,8 +1,6 @@
 import os
-import asyncio
+import threading
 import uvicorn
-
-from pyrogram import idle, filters
 
 from server.client import app
 from server.api import api
@@ -11,37 +9,31 @@ import plugins.start
 import plugins.remove_bg
 
 
-@app.on_message(filters.all)
-async def debug_all(client, message):
-    print(f"📩 MESSAGE RECEIVED: {message.chat.id}")
+def run_bot():
 
+    print("🤖 Starting Bot...")
 
-async def start_bot():
-
-    await app.start()
+    app.run()
 
     print("✅ Bot Started")
 
-    await idle()
 
-    await app.stop()
+def run_api():
 
+    print("🌐 Starting API...")
 
-async def run_services():
-
-    asyncio.create_task(start_bot())
-
-    config = uvicorn.Config(
-        app=api,
+    uvicorn.run(
+        api,
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 10000)),
         log_level="info"
     )
 
-    server = uvicorn.Server(config)
-
-    await server.serve()
-
 
 if __name__ == "__main__":
-    asyncio.run(run_services())
+
+    bot_thread = threading.Thread(target=run_bot)
+
+    bot_thread.start()
+
+    run_api()
